@@ -8,17 +8,9 @@
 
 #define RECONNECT_TIMEOUT 15000
 
-//extern volatile uint32_t pulseCount;
-//extern volatile uint32_t lastBlink;
-//extern volatile double flow;
-//extern uint32_t oldPulseCount;
-//extern uint32_t newBlink;
-//extern double oldflow;
-//extern double volume;
-//extern double oldvolume;
-extern uint32_t lastSend;
-//extern uint32_t lastPulse;
-//extern double ppl;
+extern uint32_t lastUpdate;
+extern bool hasMQTT;
+extern bool hasWIFI;
 
 class MQTTPublisher
 {
@@ -26,9 +18,8 @@ class MQTTPublisher
     bool debugMode;
     bool isStarted;
 
-    unsigned long lastConnectionAttempt = 0;		//last reconnect
-    unsigned long lastSentQuickUpdate = 0;			//last update of the fast changing info
-    unsigned long lastSentRegularUpdate = 0;		//last update of the regular update info
+    unsigned long lastConnectionAttempt = 0; // last reconnect
+    unsigned long lastSentUpdate = 0;	// last update 
 
     bool publishOnMQTT(String prepend, String topic, String value);
     bool reconnect();

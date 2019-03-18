@@ -26,10 +26,7 @@
 #define SEND_FREQUENCY 30000
 
 //update interval for fast changing values in milliseconds for mqtt (10 sec)
-#define MQTT_QUICK_UPDATE_INTERVAL  10000
-
-//update interval for slow changing values in milliseconds for mqtt (10 sec)
-#define MQTT_REGULAR_UPDATE_INTERVAL  10000
+#define MQTT_UPDATE_INTERVAL  10000
 
 //uses for debugging, serial print infp
 #define DEBUGE_MODE true

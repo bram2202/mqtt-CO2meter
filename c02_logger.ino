@@ -1,26 +1,20 @@
 // MQTT - Co2 meter + LCD 
-//
-// TODO
-// - WIFI (X)
-// - OTA  (X)
-// - LCD  ( )
-// - MQTT (X)
-// - CO2  ( )
 
-
-#include <ESP8266WiFi.h>
-#include <ESP8266mDNS.h>
-#include <ESP8266HTTPClient.h>
-#include <WiFiUdp.h>
-#include "ESP8266mDNS.h"
 #include "Settings.h"
 #include <ArduinoOTA.h>
 #include "MQTTPublisher.h"
+#include "OledScreen.h"
+#include "WifiConnector.h"
 
 // Vars
-uint32_t lastSend = 0;
+uint32_t lastUpdate = 0;
+int lastPPM = 0;
+bool hasMQTT = false;
+bool hasWIFI = false;
 
 MQTTPublisher mqqtPublisher(DEBUGE_MODE);
+OledScreen oledScreen(DEBUGE_MODE);
+WifiConnector wifiConnector(DEBUGE_MODE);
 WiFiUDP ntpUDP;
 
 void setup() {
@@ -30,19 +24,11 @@ void setup() {
 
   Serial.println("Booting");
 
-  // Setup Wifi
-  WiFi.mode(WIFI_STA);
-  WiFi.hostname(WIFI_HOSTNAME);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  // Start Screen
+  oledScreen.start();
 
-  Serial.print("Connecting to WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("Connected!");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
+  // Start wifi
+  wifiConnector.start();
 
   // Start OTA
   ArduinoOTA.setHostname("CO2Logger");
@@ -69,9 +55,18 @@ void setup() {
   mqqtPublisher.start();
 }
 
+
 void loop() {  
-  ArduinoOTA.handle();
-  yield();
+
+  //ArduinoOTA.handle();
+  //yield();
+
   mqqtPublisher.handle();
+  yield();
+
+  oledScreen.handle();
+  yield();
+
+  wifiConnector.handle();
   yield();
 }
