@@ -5,15 +5,17 @@
 #include "MQTTPublisher.h"
 #include "OledScreen.h"
 #include "WifiConnector.h"
+#include "Co2Sensor.h"
 
 // Vars
-uint32_t lastUpdate = 0;
 int lastPPM = 0;
+int sendPPM = 0;
 bool hasMQTT = false;
 bool hasWIFI = false;
 
 MQTTPublisher mqqtPublisher(DEBUGE_MODE);
 OledScreen oledScreen(DEBUGE_MODE);
+Co2Sensor co2Sensor(DEBUGE_MODE);
 WifiConnector wifiConnector(DEBUGE_MODE);
 WiFiUDP ntpUDP;
 
@@ -26,6 +28,9 @@ void setup() {
 
   // Start Screen
   oledScreen.start();
+
+  // Start Co2 sensor
+  co2Sensor.start();
 
   // Start wifi
   wifiConnector.start();
@@ -51,7 +56,7 @@ void setup() {
   });
   ArduinoOTA.begin();
 
-  // Start processes
+  // Start processes 
   mqqtPublisher.start();
 }
 
@@ -60,6 +65,9 @@ void loop() {
 
   //ArduinoOTA.handle();
   //yield();
+
+  co2Sensor.handle();
+  yield();
 
   mqqtPublisher.handle();
   yield();

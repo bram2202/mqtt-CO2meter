@@ -8,7 +8,8 @@
 
 #define RECONNECT_TIMEOUT 15000
 
-extern uint32_t lastUpdate;
+extern int sendPPM;
+extern int lastPPM;
 extern bool hasMQTT;
 extern bool hasWIFI;
 

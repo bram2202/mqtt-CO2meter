@@ -4,6 +4,8 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
+uint32_t lastUpdateMqtt;
+
 MQTTPublisher::MQTTPublisher(bool inDebugMode)
 {
   randomSeed(micros());
@@ -114,15 +116,20 @@ void MQTTPublisher::handle()
     if (send)
     {      
       uint32_t currentTime = millis();
-      if (currentTime - lastUpdate > SEND_FREQUENCY ) {
+      if (currentTime - lastUpdateMqtt > SEND_FREQUENCY ) {
         
         if (debugMode){
           Serial.println("MQTT) SEND");
         }
 
-        lastUpdate = currentTime;
+        // Check if last send value differs from new value
+        if( lastPPM == sendPPM){
+          return;
+        }
+
+        lastUpdateMqtt = currentTime;
         // SEND MQTT
-        //publishOnMQTT(mqttTopic, "/flow", String(flow, 4));
+        publishOnMQTT(mqttTopic, "/eco2", String(lastPPM));
 
       }
 

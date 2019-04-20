@@ -2,16 +2,14 @@
 #include <Arduino.h>
 
 extern int lastPPM;
-extern bool hasMQTT;
-extern bool hasWIFI;
 
-class OledScreen
+class Co2Sensor
 {
   private:
     bool debugMode;
 
   public:
-    OledScreen(bool inDebugMode = false);
+    Co2Sensor(bool inDebugMode = false);
     void start();
     void handle();
 };

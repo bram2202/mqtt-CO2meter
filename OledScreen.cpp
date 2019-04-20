@@ -47,6 +47,7 @@ void OledScreen::handle()
             display.println("A: ");
             display.println(keyString[button.BUTTON_A]);
             display.display();
+            delay(2000);
         }
 
         if (button.BUTTON_B)
@@ -59,31 +60,52 @@ void OledScreen::handle()
             display.println("B: ");
             display.println(keyString[button.BUTTON_B]);
             display.display();
+
+            delay(2000);
         }
            
         display.clearDisplay();
 
-        if(hasWIFI)
+        // if set, WIFI and MQTT status is shows
+        if(SHOW_CONNECTION_STATUS)
         {
-            display.setCursor(0, 0);
-            display.println("WIFI: Y");
+            if(hasWIFI)
+            {
+                display.setCursor(0, 0);
+                display.println("WIFI: Y");
+            }
+            else
+            {
+                display.setCursor(0, 0);
+                display.println("WIFI: N");
+            }
+
+            if(hasMQTT)
+            {
+                display.setCursor(0, 10);
+                display.println("MQTT: Y");
+            }
+            else
+            {
+                display.setCursor(0, 10);
+                display.println("MQTT: N");
+            }
+
+            if(lastPPM != 0)
+            {
+                display.setCursor(15, 30);
+                display.println(String(lastPPM) + " ppm");
+            }
         }
         else
         {
-            display.setCursor(0, 0);
-            display.println("WIFI: N");
+            if(lastPPM != 0)
+            {
+                display.setCursor(15, 15);
+                display.println(String(lastPPM) + " ppm");
+            }
         }
 
-        if(hasMQTT)
-        {
-            display.setCursor(0, 10);
-            display.println("MQTT: Y");
-        }
-        else
-        {
-            display.setCursor(0, 10);
-            display.println("MQTT: N");
-        }
 
         
         display.display();
