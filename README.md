@@ -1,13 +1,13 @@
 # C02 logger
 
-Using the small LOLIN D1 mini, a Oled shield and a sensor breakout board, its possible to get a sens of C02 in the air.
+Using the small LOLIN D1 mini, a Oled shield and a sensor breakout board, its possible to get a sense of C02 in the air.
 
 For example to use with `Hass.io` [[link]](https://www.home-assistant.io/)
 
-The Oled sceen is optinal and can be disabled in the settings.
+The Oled screen is optional and can be disabled in the settings.
 
 
-### end result
+### End result
 
 front:
 
@@ -32,7 +32,14 @@ back:
 * (For Wemos d1 mini) CH340G driver [[link]](https://wiki.wemos.cc/downloads)
 
 ## Connection scheme
-* todo
+The oled shield fits exactly on the ESP, so no other connections are required.
+
+| ESP8266 | SGP30 |  
+| :--------- |:-------| 
+| 3.3v | VCC  |
+| GND  | GND  |
+| D1   | SCL  |
+| D2   | SDA  |
 
 ## Settings
 Copy `Settings.example.h` to `Settings.h` and fill in the correct data.
@@ -50,12 +57,12 @@ Copy `Settings.example.h` to `Settings.h` and fill in the correct data.
 | MQTT_UPDATE_INTERVAL | 30000 | Send interval (ms) |
 | SENSOR_MEASUREMENT_FREQUENCY | 5000 | Sensor update interval (ms) |
 | USE_SCREEN | true | Enable or disable screen |
-| SHOW_CONNECTION_STATUS | true | show wifi and MQTT status |
-| DEBUGE_MODE | true | debug mode |
+| SHOW_CONNECTION_STATUS | true | Show wifi and MQTT status |
+| DEBUGE_MODE | true | Debug mode |
 
 ## MQTT
 Subscribe to `co2meter/<topic>` in your MQTT client. prefix can be changes in the settings.
 
 | Topic | Description| Unit  |
 | ------------- |:-------------:| -----:|
-| eco2     | eCO2 value | ppm |
+| eco2  | eCO2 value | ppm |
