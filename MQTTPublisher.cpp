@@ -4,8 +4,6 @@
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-uint32_t lastUpdateMqtt;
-
 MQTTPublisher::MQTTPublisher(bool inDebugMode)
 {
   randomSeed(micros());
@@ -104,43 +102,23 @@ void MQTTPublisher::handle()
     if (!reconnect()) return;
   }
 
-  //got a valid mqtt connection. Loop through the inverts and send out the data if needed
-  client.loop();
-
-  bool send = millis() - lastSentUpdate > MQTT_UPDATE_INTERVAL;
-  bool sendOk = true; //if a mqtt message fails, wait for retransmit at a later time
-  if (hasWIFI &&  send)
+  if (hasWIFI && millis() - lastUpdateMqtt > MQTT_UPDATE_INTERVAL)
   {
-    
-    auto mqttTopic = MQTT_TOPIC;
-    if (send)
-    {      
-      uint32_t currentTime = millis();
-      if (currentTime - lastUpdateMqtt > SEND_FREQUENCY ) {
-        
-        if (debugMode){
-          Serial.println("MQTT) SEND");
-        }
+    lastUpdateMqtt = millis();
 
-        // Check if last send value differs from new value
-        if( lastPPM == sendPPM){
-          return;
-        }
-
-        lastUpdateMqtt = currentTime;
-        // SEND MQTT
-        publishOnMQTT(mqttTopic, "/eco2", String(lastPPM));
-
-      }
-
+    // Check if last send value differs from new value
+    if(lastPPM == sendPPM){
+      return;
     }
     
-    client.loop();
-
+    if (debugMode){
+      Serial.println("MQTT) SEND");
+    }
+        
+    // SEND MQTT
+    publishOnMQTT(MQTT_TOPIC, "/eco2", String(lastPPM));    
   }
 
-  if (send)
-    lastSentUpdate = millis();
 }
 
 bool MQTTPublisher::publishOnMQTT(String prepend, String topic, String value)

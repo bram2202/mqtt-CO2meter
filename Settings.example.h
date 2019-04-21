@@ -20,16 +20,19 @@
 #define MQTT_PASSWORD   "<mqtt password>"
 
 //mqtt topic for posting info
-#define MQTT_TOPIC "<mqtt topic>"
-
-//mqtt send freq 
-#define SEND_FREQUENCY 30000
+#define MQTT_TOPIC "co2meter"
 
 //update interval for fast changing values in milliseconds for mqtt (10 sec)
 #define MQTT_UPDATE_INTERVAL  10000
 
-//uses for debugging, serial print infp
+//update interval for CO2
+#define SENSOR_MEASUREMENT_FREQUENCY 30000
+
+//disable screen
+#define USE_SCREEN true
+
+//show Wifi and mqtt status on screen
+#define SHOW_CONNECTION_STATUS true
+
+//uses for debugging, serial print info
 #define DEBUGE_MODE true
-
-
-

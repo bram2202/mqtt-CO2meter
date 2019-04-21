@@ -1,5 +1,11 @@
-// MQTT - Co2 meter + LCD 
+/*
+  ESP8266 based CO2 logger
 
+  created  21-04-2019
+  by Bram van Deventer
+
+  https://github.com/bram2202/mqtt-C02meter
+*/
 #include "Settings.h"
 #include <ArduinoOTA.h>
 #include "MQTTPublisher.h"
@@ -26,8 +32,11 @@ void setup() {
 
   Serial.println("Booting");
 
-  // Start Screen
-  oledScreen.start();
+  if(USE_SCREEN)
+  {
+    // Start Screen
+    oledScreen.start();
+  }
 
   // Start Co2 sensor
   co2Sensor.start();
@@ -38,21 +47,32 @@ void setup() {
   // Start OTA
   ArduinoOTA.setHostname("CO2Logger");
   ArduinoOTA.onStart([]() {
-    Serial.println("Start Ota");
+    if(DEBUGE_MODE)
+    {
+      Serial.println("Start Ota");
+    }
   });
   ArduinoOTA.onEnd([]() {
-    Serial.println("\nEnd Ota");
+    if(DEBUGE_MODE)
+    {
+      Serial.println("\nEnd Ota");
+    }
   });
   ArduinoOTA.onProgress([](unsigned int progress, unsigned int total) {
-    Serial.printf("OTA Progress: %u%%\r", (progress / (total / 100)));
+    if(DEBUGE_MODE)
+    {
+      Serial.printf("OTA Progress: %u%%\r", (progress / (total / 100)));
+    }
   });
   ArduinoOTA.onError([](ota_error_t error) {
-    Serial.printf("OTA Error[%u]: ", error);
-    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    if(DEBUGE_MODE){
+      Serial.printf("OTA Error[%u]: ", error);
+      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+      else if (error == OTA_END_ERROR) Serial.println("End Failed");
+    }
   });
   ArduinoOTA.begin();
 
@@ -60,11 +80,10 @@ void setup() {
   mqqtPublisher.start();
 }
 
-
 void loop() {  
 
-  //ArduinoOTA.handle();
-  //yield();
+  ArduinoOTA.handle();
+  yield();
 
   co2Sensor.handle();
   yield();
@@ -72,8 +91,11 @@ void loop() {
   mqqtPublisher.handle();
   yield();
 
-  oledScreen.handle();
-  yield();
+  if(USE_SCREEN)
+  {
+    oledScreen.handle();
+    yield();
+  }
 
   wifiConnector.handle();
   yield();

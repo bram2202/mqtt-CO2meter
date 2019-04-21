@@ -19,8 +19,8 @@ class MQTTPublisher
     bool debugMode;
     bool isStarted;
 
-    unsigned long lastConnectionAttempt = 0; // last reconnect
-    unsigned long lastSentUpdate = 0;	// last update 
+    uint32_t lastConnectionAttempt = 0; // last reconnect
+    uint32_t lastUpdateMqtt; // last data send
 
     bool publishOnMQTT(String prepend, String topic, String value);
     bool reconnect();

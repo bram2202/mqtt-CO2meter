@@ -4,6 +4,11 @@
 #include <LOLIN_I2C_BUTTON.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
+#include <ESP8266HTTPClient.h>
+#include <WiFiUdp.h>
+#include "ESP8266mDNS.h"
 
 #define OLED_RESET -1
 Adafruit_SSD1306 display(OLED_RESET);
@@ -37,6 +42,7 @@ void OledScreen::handle()
 {
     if (button.get() == 0) // Button press
     {
+        // Display IP
         if (button.BUTTON_A)
         {
             if (debugMode){
@@ -44,25 +50,26 @@ void OledScreen::handle()
             }
             display.clearDisplay();
             display.setCursor(0, 0);
-            display.println("A: ");
-            display.println(keyString[button.BUTTON_A]);
+            display.println("IP: ");
+            display.setCursor(0, 10);
+            display.println(WiFi.localIP());
             display.display();
             delay(2000);
         }
 
-        if (button.BUTTON_B)
-        {
-            if (debugMode){
-                Serial.println("Button B pressed");
-            }
-            display.clearDisplay();
-            display.setCursor(0, 0);
-            display.println("B: ");
-            display.println(keyString[button.BUTTON_B]);
-            display.display();
+        // // Display ?
+        // if (button.BUTTON_B)
+        // {
+        //     if (debugMode){
+        //         Serial.println("Button B pressed");
+        //     }
+        //     display.clearDisplay();
+        //     display.setCursor(0, 0);
+        //     display.println("B: ");
+        //     display.display();
 
-            delay(2000);
-        }
+        //     delay(2000);
+        // }
            
         display.clearDisplay();
 

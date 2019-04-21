@@ -4,7 +4,6 @@
 #include "Adafruit_SGP30.h"
 
 Adafruit_SGP30 sgp;
-uint32_t lastUpdateCo2;
 
 Co2Sensor::Co2Sensor(bool inDebugMode)
 {
@@ -28,8 +27,7 @@ void Co2Sensor::start()
 void Co2Sensor::handle()
 {
 
-  uint32_t currentTime = millis();
-  if (currentTime - lastUpdateCo2 > SEND_FREQUENCY ) {
+  if (millis() - lastUpdateCo2 > SENSOR_MEASUREMENT_FREQUENCY) {
     
     if (! sgp.IAQmeasure()) {
       if (debugMode){
