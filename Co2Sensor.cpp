@@ -27,17 +27,18 @@ void Co2Sensor::start()
 void Co2Sensor::handle()
 {
 
-  if (millis() - lastUpdateCo2 > SENSOR_MEASUREMENT_FREQUENCY) {
+  if (millis() - lastSensorUpdate > SENSOR_MEASUREMENT_FREQUENCY) {
     
     if (! sgp.IAQmeasure()) {
       if (debugMode){
-        Serial.println("CO2)Measurement failed");
+        Serial.println("CO2) Measurement failed");
       }
       return;
     }
-
-    lastPPM = sgp.eCO2;  
-    lastUpdateCo2 = millis();    
+    
+    lastEco2 = sgp.eCO2;  
+    lastTVoc = sgp.TVOC;
+    lastSensorUpdate = millis();    
    
     if (debugMode){
       Serial.println("CO2) updated");

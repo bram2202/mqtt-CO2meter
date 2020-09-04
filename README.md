@@ -1,6 +1,7 @@
 # C02 logger
 
-Using the small LOLIN D1 mini, a Oled shield and a sensor breakout board, its possible to get a sense of C02 in the air.
+Using the small LOLIN D1 mini, a Oled shield and a sensor breakout board, its possible to get a sense of CO2 in the air.<br>
+Sends both eCO2 ans TVOC.
 
 For example to use with `Hass.io` [[link]](https://www.home-assistant.io/)
 
@@ -66,3 +67,4 @@ Subscribe to `co2meter/<topic>` in your MQTT client. prefix can be changes in th
 | Topic | Description| Unit  |
 | ------------- |:-------------:| -----:|
 | eco2  | eCO2 value | ppm |
+| tvoc  | TVOC value | PPB |

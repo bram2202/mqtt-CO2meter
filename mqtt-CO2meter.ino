@@ -14,8 +14,10 @@
 #include "Co2Sensor.h"
 
 // Vars
-int lastPPM = 0;
-int sendPPM = 0;
+int lastEco2 = 0;
+int lastTVoc = 0;
+int sendEco2 = 0;
+int sendTVoc = 0;
 bool hasMQTT = false;
 bool hasWIFI = false;
 

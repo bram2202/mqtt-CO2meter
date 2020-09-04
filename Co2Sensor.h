@@ -1,13 +1,14 @@
 #pragma once
 #include <Arduino.h>
 
-extern int lastPPM;
+extern int lastEco2;
+extern int lastTVoc;
 
 class Co2Sensor
 {
   private:
     bool debugMode;
-    uint32_t lastUpdateCo2;
+    uint32_t lastSensorUpdate;
 
   public:
     Co2Sensor(bool inDebugMode = false);

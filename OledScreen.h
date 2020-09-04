@@ -1,7 +1,8 @@
 #pragma once
 #include <Arduino.h>
 
-extern int lastPPM;
+extern int lastEco2;
+extern int lastTVoc;
 extern bool hasMQTT;
 extern bool hasWIFI;
 

@@ -19,7 +19,7 @@ String keyString[] = {"None", "Press", "Long", "Double", "Hold"};
 
 OledScreen::OledScreen(bool inDebugMode)
 {
-  debugMode = inDebugMode;
+    debugMode = inDebugMode;
 }
 
 // start screen en display text
@@ -29,14 +29,13 @@ void OledScreen::start()
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(WHITE);
-    display.setCursor(10, 20); // col, row
+    display.setCursor(0, 0); // col, row
     display.println("Booting..");
     display.display();
     // sleep
     delay(500);
     handle();
 }
-
 
 void OledScreen::handle()
 {
@@ -45,7 +44,8 @@ void OledScreen::handle()
         // Display IP
         if (button.BUTTON_A)
         {
-            if (debugMode){
+            if (debugMode)
+            {
                 Serial.println("Button A pressed");
             }
             display.clearDisplay();
@@ -57,26 +57,12 @@ void OledScreen::handle()
             delay(2000);
         }
 
-        // // Display ?
-        // if (button.BUTTON_B)
-        // {
-        //     if (debugMode){
-        //         Serial.println("Button B pressed");
-        //     }
-        //     display.clearDisplay();
-        //     display.setCursor(0, 0);
-        //     display.println("B: ");
-        //     display.display();
-
-        //     delay(2000);
-        // }
-           
         display.clearDisplay();
 
         // if set, WIFI and MQTT status is shows
-        if(SHOW_CONNECTION_STATUS)
+        if (SHOW_CONNECTION_STATUS)
         {
-            if(hasWIFI)
+            if (hasWIFI)
             {
                 display.setCursor(0, 0);
                 display.println("WIFI: Y");
@@ -87,7 +73,7 @@ void OledScreen::handle()
                 display.println("WIFI: N");
             }
 
-            if(hasMQTT)
+            if (hasMQTT)
             {
                 display.setCursor(0, 10);
                 display.println("MQTT: Y");
@@ -98,26 +84,33 @@ void OledScreen::handle()
                 display.println("MQTT: N");
             }
 
-            if(lastPPM != 0)
+            if (lastEco2 != 0)
             {
-                display.setCursor(15, 30);
-                display.println(String(lastPPM) + " ppm");
+                display.setCursor(0, 30);
+                display.println("eCO2: " + String(lastEco2));
+            }
+
+            if (lastTVoc != 0)
+            {
+                display.setCursor(0, 40);
+                display.println("TVOC: " + String(lastTVoc));
             }
         }
         else
         {
-            if(lastPPM != 0)
+            if (lastEco2 != 0)
             {
-                display.setCursor(15, 15);
-                display.println(String(lastPPM) + " ppm");
+                display.setCursor(0, 15);
+                display.println("ECO2: " + String(lastEco2));
+            }
+
+            if (lastTVoc != 0)
+            {
+                display.setCursor(0, 25);
+                display.println("TVOC: " + String(lastTVoc));
             }
         }
 
-
-        
         display.display();
     }
-
-    
-    
 }

@@ -16,11 +16,10 @@ MQTTPublisher::~MQTTPublisher()
   client.disconnect();
 }
 
-
 bool MQTTPublisher::reconnect()
 {
   lastConnectionAttempt = millis();
-  
+
   if (debugMode)
   {
     Serial.print("MQTT) Attempt connection to server: ");
@@ -46,7 +45,8 @@ bool MQTTPublisher::reconnect()
 
   if (clientConnected)
   {
-    if (debugMode) {
+    if (debugMode)
+    {
       Serial.println("MQTT) connected");
     }
 
@@ -56,19 +56,19 @@ bool MQTTPublisher::reconnect()
     client.publish("CO2Meter", "online");
 
     return true;
-  } else {
+  }
+  else
+  {
 
     if (debugMode)
     {
       Serial.print("MQTT)  failed, rc=");
       Serial.print(client.state());
     }
-
   }
 
   return false;
 }
-
 
 void MQTTPublisher::start()
 {
@@ -78,7 +78,8 @@ void MQTTPublisher::start()
     return; //not configured
   }
 
-  if (debugMode){
+  if (debugMode)
+  {
     Serial.println("MQTT) enabled. Connecting.");
   }
 
@@ -97,9 +98,11 @@ void MQTTPublisher::handle()
   if (!isStarted)
     return;
 
-  if (!client.connected() && millis() - lastConnectionAttempt > RECONNECT_TIMEOUT) {
+  if (!client.connected() && millis() - lastConnectionAttempt > RECONNECT_TIMEOUT)
+  {
     hasMQTT = false;
-    if (!reconnect()) return;
+    if (!reconnect())
+      return;
   }
 
   if (hasWIFI && millis() - lastUpdateMqtt > MQTT_UPDATE_INTERVAL)
@@ -107,23 +110,33 @@ void MQTTPublisher::handle()
     lastUpdateMqtt = millis();
 
     // Check if last send value differs from new value
-    if(lastPPM == sendPPM){
-      return;
-    }
-    
-    if (debugMode){
-      Serial.println("MQTT) SEND");
-    }
-        
-    // SEND MQTT
-    publishOnMQTT(MQTT_TOPIC, "/eco2", String(lastPPM));    
-  }
+    if (lastEco2 != sendEco2)
+    {
+      if (debugMode)
+      {
+        Serial.println("MQTT) SEND ECO2");
+      }
 
+      // SEND MQTT
+      publishOnMQTT(MQTT_TOPIC, "/eco2", String(lastEco2));
+    }
+
+    if (lastTVoc != sendTVoc)
+    {
+      if (debugMode)
+      {
+        Serial.println("MQTT) SEND TVOC");
+      }
+
+      // SEND MQTT
+      publishOnMQTT(MQTT_TOPIC, "/tvoc", String(lastTVoc));
+    }
+  }
 }
 
 bool MQTTPublisher::publishOnMQTT(String prepend, String topic, String value)
 {
-  auto retVal =  client.publish((prepend.c_str() + topic).c_str(), value.c_str());
+  auto retVal = client.publish((prepend.c_str() + topic).c_str(), value.c_str());
   yield();
   return retVal;
 }
